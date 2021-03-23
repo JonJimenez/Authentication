@@ -3,25 +3,21 @@ package com.example.Authentication;
 
 import com.example.Authentication.entities.User;
 import com.example.Authentication.repositories.UserRepository;
-import com.example.Authentication.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.util.Optional;
 
 
 
 @DataJpaTest
 
-public class AuthenticationTests {
+public class UserRepositoryTests {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -41,8 +37,11 @@ public class AuthenticationTests {
     public void whenFindByName_thenReturnUser() {
         // when
         User found = userRepository.findByName("Dummy");
+        User notFound = userRepository.findByName("Dummy5");
         // then
         assertEquals(found.getName(), "Dummy");
+        assertNotEquals(found.getName(),"Dummy2");
+        assertEquals(notFound,null);
     }
     
     @Test
@@ -50,9 +49,13 @@ public class AuthenticationTests {
     	//when
     	Optional<User> found = userRepository.findById(3);
     	//then
+    	Optional<User> notFound = userRepository.findById(6);
+    	
     	assertEquals(found.get().getName(),"Dummy3");
     	assertEquals(found.get().getEmail(),"test3@test.com");
     	assertEquals(found.get().getPassword(),"password3");
+    	
+    	assertEquals(notFound.isPresent(),false);
     	
     }
 
